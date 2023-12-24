@@ -75,14 +75,23 @@ fn main() {
         states.push(state)
     }
     let mut sum = 0;
-    for x in states {
+    for x in states.iter() {
         // println!("{:?}", x);
         match compare_state(&init_state, &x) {
             Some(x) => sum += x,
             None => (),
         }
     }
+    let power: usize = states.iter().map(|x| find_min(&x)).sum();
     println!("Total: {}", sum);
+    println!("Power: {}", power);
+}
+
+fn find_min(input: &BagState) -> usize {
+    let blue = input.draws.iter().map(|x| x.blue).max().unwrap_or(0);
+    let red = input.draws.iter().map(|x| x.red).max().unwrap_or(0);
+    let green = input.draws.iter().map(|x| x.green).max().unwrap_or(0);
+    blue * red * green
 }
 
 fn compare_state(init: &Draws, second: &BagState) -> Option<usize> {
